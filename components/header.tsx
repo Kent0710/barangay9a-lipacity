@@ -7,7 +7,7 @@ const Header = () => {
     const navs = useMemo(() => [
         {
             label: "Home",
-            href: "/home",
+            href: "/",
         },
         {
             label: "Digital Literacy",
