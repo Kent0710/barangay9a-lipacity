@@ -41,6 +41,36 @@ export type Database = {
         }
         Relationships: []
       }
+      educational_resource: {
+        Row: {
+          content: string
+          created_at: string
+          description: string
+          icon: string | null
+          id: string
+          slug: string
+          title: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          description: string
+          icon?: string | null
+          id?: string
+          slug: string
+          title: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          description?: string
+          icon?: string | null
+          id?: string
+          slug?: string
+          title?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
