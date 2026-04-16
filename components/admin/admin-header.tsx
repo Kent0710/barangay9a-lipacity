@@ -17,7 +17,7 @@ const AdminHeader = () => {
                     <User className="w-4 h-4" />
                     <span>Admin</span>
                 </div>
-                <Link href="/home" className="text-sm font-semibold text-green-700 hover:text-green-800">
+                <Link href="/" className="text-sm font-semibold text-green-700 hover:text-green-800">
                     View Site
                 </Link>
                 <Button variant="outline" className="border-red-500 text-red-500 hover:bg-red-50 hover:text-red-600 h-8 px-4 text-xs font-semibold rounded-md">

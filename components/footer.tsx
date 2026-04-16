@@ -3,10 +3,10 @@ import { Mail, Phone, MapPin } from "lucide-react";
 
 export default function Footer() {
     return (
-        <footer className="bg-green-900 text-green-50 py-12 px-4 mt-auto">
-            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+        <footer className="bg-green-900 text-green-50 py-12 px-6 md:px-[5rem] mt-auto">
+            <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-12">
                 {/* Brand / About */}
-                <div className="flex flex-col space-y-4">
+                <div className="flex flex-col space-y-4 sm:col-span-2 md:col-span-1">
                     <h3 className="text-2xl font-bold text-white">Barangay 9A</h3>
                     <p className="text-green-200 text-sm leading-relaxed max-w-sm">
                         Building a connected, informed, and resilient community in Lipa City, Batangas. We are dedicated to providing excellent public service and fostering a safe environment for all residents.
