@@ -21,6 +21,10 @@ const Header = () => {
             label: "Contact Us",
             href: "/contact",
         },
+        {
+            label: 'Admin',
+            href: '/admin',
+        }
     ], [])
 
     return (
