@@ -24,3 +24,23 @@ export async function getEducationalResourceById(id: string): Promise<{ data: Ed
 
     return { data, error: null }
 }
+
+export async function getEducationalResourceBySlug(slug: string): Promise<{ data: EducationalResource | null, error: string | null }> {
+    const supabase = await createClient()
+
+    if (!slug) {
+        return { data: null, error: "Invalid slug provided" }
+    }
+
+    const { data, error } = await supabase
+        .from("educational_resource")
+        .select("*")
+        .eq("slug", slug)
+        .single()
+
+    if (error) {
+        return { data: null, error: error.message }
+    }
+
+    return { data, error: null }
+}

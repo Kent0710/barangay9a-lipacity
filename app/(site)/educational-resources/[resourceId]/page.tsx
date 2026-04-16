@@ -1,128 +1,126 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Link from "next/link";
-import { Card, CardContent } from "@/components/ui/card";
+import { notFound } from "next/navigation";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import React from "react";
+import { getEducationalResourceBySlug } from "@/actions/educational-resource/get-resource-by-id";
 
-// In the future, this will be: 
-// const SingleEducationalResourcePage = async ({ params }: { params: { resourceId: string } }) => {
-//   const resource = await getResourceBySlug(params.resourceId);
-//   Then you would use An external package like <ReactMarkdown>{resource.content}</ReactMarkdown> inside the prose div.
+export default async function SingleEducationalResourcePage(props: { params: Promise<{ resourceId: string }> }) {
+    const params = await props.params;
+    const { data: resource, error } = await getEducationalResourceBySlug(params.resourceId);
 
-const SingleEducationalResourcePage = () => {
+    if (error || !resource) {
+        notFound();
+    }
+
+    const MarkdownComponents: any = {
+        h1: ({ ...props }: any) => <h1 className="text-3xl font-bold text-green-900 mt-8 mb-4 tracking-tight" {...props} />,
+        h2: ({ ...props }: any) => <h2 className="text-[26px] font-bold text-green-900 mt-14 mb-6 pb-3 border-b border-green-700/20 tracking-tight" {...props} />,
+        h3: ({ ...props }: any) => <h3 className="text-xl font-bold text-green-800 mt-8 mb-4 tracking-tight" {...props} />,
+        p: ({ ...props }: any) => <p className="text-gray-600 leading-relaxed mb-6 text-[16px]" {...props} />,
+        strong: ({ ...props }: any) => <strong className="font-bold text-green-900" {...props} />,
+        
+        ol: ({ ...props }: any) => (
+            <ol 
+                className="list-none p-0 mx-0 my-8 space-y-4 [counter-reset:step-counter]
+                           [&>li]:relative [&>li]:bg-white [&>li]:p-6 [&>li]:pl-[5rem] [&>li]:rounded-2xl [&>li]:shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07)] [&>li]:border [&>li]:border-gray-50 text-gray-600 text-[15px]
+                           [&>li]:[counter-increment:step-counter]
+                           [&>li::before]:content-[counter(step-counter)] [&>li::before]:absolute [&>li::before]:left-6 [&>li::before]:top-6 [&>li::before]:w-10 [&>li::before]:h-10 [&>li::before]:bg-[#429955] [&>li::before]:text-white [&>li::before]:rounded-full [&>li::before]:flex [&>li::before]:items-center [&>li::before]:justify-center [&>li::before]:font-bold [&>li::before]:text-lg
+                           [&>li_strong]:block [&>li_strong]:text-green-900 [&>li_strong]:text-[17px] [&>li_strong]:mb-2
+                           [&>li>p]:m-0"
+                {...props} 
+            />
+        ),
+        
+        ul: ({ ...props }: any) => (
+            <ul 
+                className="list-none p-0 mx-0 my-8 space-y-3
+                           [&>li]:relative [&>li]:pl-8 text-gray-600 font-medium text-[15px]
+                           [&>li::before]:content-['✓'] [&>li::before]:absolute [&>li::before]:left-0 [&>li::before]:top-0 [&>li::before]:text-[#429955] [&>li::before]:font-bold"
+                {...props} 
+            />
+        ),
+
+        blockquote: ({ children, ...props }: any) => {
+            let textContent = '';
+            
+            const extractText = (child: any): string => {
+                if (typeof child === 'string') return child;
+                if (child?.props?.children) {
+                    if (Array.isArray(child.props.children)) {
+                       return child.props.children.map(extractText).join('');
+                    }
+                    return extractText(child.props.children);
+                }
+                return '';
+            };
+
+            React.Children.forEach(children, (child) => {
+                textContent += extractText(child);
+            });
+
+            const isWarning = textContent.includes('⚠️');
+
+            return (
+                <div 
+                    className={`my-8 p-6 rounded-xl border-l-[6px] shadow-sm ${
+                        isWarning 
+                            ? 'bg-[#fff8f1] border-[#fbbf24]' 
+                            : 'bg-[#f4f9f1] border-[#4aa047]'
+                    }`}
+                >
+                    <div 
+                        className={`font-medium ${
+                            isWarning ? '[&>p]:text-[#c2410c] [&_strong]:text-[#c2410c]' : '[&>p]:text-[#166534] [&_strong]:text-[#166534]'
+                        } [&>p]:mb-0 [&>p]:leading-relaxed`} 
+                        {...props}
+                    >
+                        {children}
+                    </div>
+                </div>
+            );
+        },
+    };
+
     return (
-        <div className="min-h-screen bg-gray-50/50 py-12 px-4 sm:px-6">
-            <div className="max-w-3xl mx-auto space-y-8">
-                
-                {/* Navigation */}
-                <Link href="/educational-resources" className="text-sm font-medium text-green-600 hover:text-green-700 flex items-center">
-                    ← Back to Resources
-                </Link>
-
-                {/* Header */}
-                <header className="space-y-4">
-                    <div className="inline-flex items-center justify-center p-3 bg-white rounded-2xl shadow-sm border border-gray-100 text-4xl mb-2">
-                        🌐
-                    </div>
-                    <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
-                        Internet Basics
-                    </h1>
-                    <p className="text-xl text-gray-500">
-                        Learn how to use the internet safely and confidently
-                    </p>
-                </header>
-
-                <hr className="border-gray-200" />
-
-                {/* 
-                    Main Content 
-                    Note: If using @tailwindcss/typography and react-markdown, 
-                    this entire section below would just be:
-                    <div className="prose prose-green max-w-none">
-                       <ReactMarkdown>{resource.content}</ReactMarkdown>
-                    </div>
-                */}
-                <article className="space-y-10 text-gray-700 leading-relaxed text-lg">
+        <div className="min-h-screen bg-[#f4f9f1] flex flex-col">
+            
+            {/* Header / Hero Section (Green Block) */}
+            <div className="bg-[#4aa047] w-full py-16 px-4 shrink-0">
+                <div className="max-w-4xl mx-auto relative">
+                    <Link href="/home" className="absolute -top-10 left-0 text-sm font-semibold text-green-100 hover:text-white flex items-center transition-colors">
+                        &larr; Back to Home
+                    </Link>
                     
-                    {/* Standard Text Section */}
-                    <section className="space-y-4">
-                        <h2 className="text-2xl font-bold text-gray-900">What is the Internet?</h2>
-                        <p>
-                            The internet is like a giant library that connects computers all around the world. It lets you find information, talk to people, watch videos, and do many other things - all from your phone or computer!
-                        </p>
-                        <p>
-                            Think of it as a big network of roads that connect different places. Instead of cars traveling on these roads, it&apos;s information that travels from one computer to another.
-                        </p>
-                    </section>
-
-                    {/* Callout / Information Box */}
-                    <div className="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-xl">
-                        <h4 className="flex items-center text-blue-900 font-bold mb-2">
-                            💡 Did You Know?
-                        </h4>
-                        <p className="text-blue-800 text-base">
-                            The internet is used by billions of people every day. In the Philippines alone, millions of Filipinos use the internet for work, school, and staying connected with family.
-                        </p>
-                    </div>
-
-                    {/* Numbered List Section */}
-                    <section className="space-y-6">
-                        <h2 className="text-2xl font-bold text-gray-900">How to Connect to the Internet</h2>
-                        <p>There are different ways to connect to the internet:</p>
-
-                        <div className="space-y-6">
-                            <div className="flex gap-4">
-                                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-green-100 text-green-700 flex items-center justify-center font-bold">1</div>
-                                <div>
-                                    <h3 className="font-bold text-gray-900">Mobile Data (Using Your Phone)</h3>
-                                    <p className="mt-1 text-base">If you have a smartphone with a SIM card and load, you can connect to the internet anywhere there&apos;s a signal. Just turn on your &quot;Mobile Data&quot; in your phone settings.</p>
-                                </div>
-                            </div>
-
-                            <div className="flex gap-4">
-                                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-green-100 text-green-700 flex items-center justify-center font-bold">2</div>
-                                <div>
-                                    <h3 className="font-bold text-gray-900">Wi-Fi (Wireless Connection)</h3>
-                                    <p className="mt-1 text-base">Wi-Fi lets you connect to the internet without using your mobile data. You can find Wi-Fi at home, in the barangay hall, malls, and other public places. Just look for the Wi-Fi symbol and connect!</p>
-                                </div>
-                            </div>
+                    <div className="text-center space-y-4 pt-4">
+                        <div className="inline-flex items-center justify-center text-[4rem] text-white drop-shadow-md mb-2">
+                            {resource.icon || "📚"}
                         </div>
-                    </section>
-
-                    {/* Warning Callout Box */}
-                    <div className="bg-orange-50 border-l-4 border-orange-500 p-6 rounded-r-xl">
-                        <h4 className="flex items-center text-orange-900 font-bold mb-2">
-                            ⚠️ Be Careful!
-                        </h4>
-                        <p className="text-orange-800 text-base">
-                            Not everything on the internet is true. Always check if the information comes from a trusted source, like government websites or well-known news organizations.
+                        <h1 className="text-4xl md:text-[44px] font-extrabold tracking-tight text-white drop-shadow-sm">
+                            {resource.title}
+                        </h1>
+                        <p className="text-lg md:text-[20px] text-green-50 font-medium">
+                            {resource.description}
                         </p>
                     </div>
-                </article>
-
-                <hr className="border-gray-200 my-12" />
-
-                {/* Footer: Explore More */}
-                <section>
-                    <h3 className="text-xl font-bold text-gray-900 mb-6">Explore More Topics</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {[
-                            { icon: "📧", title: "Using Email" },
-                            { icon: "📱", title: "Social Media" },
-                            { icon: "🔒", title: "Online Safety" },
-                            { icon: "💻", title: "Computer Basics" }
-                        ].map((topic, i) => (
-                            <Link href="#" key={i}>
-                                <Card className="hover:border-green-500 hover:shadow-md transition-all cursor-pointer">
-                                    <CardContent className="p-4 flex items-center gap-3">
-                                        <span className="text-2xl">{topic.icon}</span>
-                                        <span className="font-semibold text-gray-700">{topic.title}</span>
-                                    </CardContent>
-                                </Card>
-                            </Link>
-                        ))}
-                    </div>
-                </section>
+                </div>
             </div>
-        </div>
-    )
-};
 
-export default SingleEducationalResourcePage;
+            {/* Main Content Rendered via Custom Markdown Components */}
+            <div className="w-full flex-1 px-4 py-12 md:py-16">
+                <div className="max-w-4xl mx-auto">
+                    <article className="max-w-none">
+                        <ReactMarkdown 
+                            remarkPlugins={[remarkGfm]}
+                            components={MarkdownComponents}
+                        >
+                            {resource.content}
+                        </ReactMarkdown>
+                    </article>
+                </div>
+            </div>
+
+        </div>
+    );
+}
