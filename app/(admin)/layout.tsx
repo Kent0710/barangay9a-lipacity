@@ -7,11 +7,11 @@ const AdminLayout = ({
     children: React.ReactNode;
 }>) => {
     return (
-        <div>
+        <div className="flex flex-col min-h-screen bg-gray-50">
             <AdminHeader />
-            <div className="flex mt-[2rem]">
+            <div className="flex flex-1 overflow-hidden">
                 <AdminSidebar />
-                <main className="flex-1 pr-[2rem]">{children}</main>
+                <main className="flex-1 overflow-y-auto p-8">{children}</main>
             </div>
         </div>
     );

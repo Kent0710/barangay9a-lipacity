@@ -2,7 +2,7 @@ import EducationalResourceCard from "./educational-resource-card";
 import { getAllEducationalResources } from "@/actions/educational-resource/get-all-resources";
 
 const EducationalResources = async () => {
-    const { data: resources, error } = await getAllEducationalResources(6);
+    const { data: resources, error } = await getAllEducationalResources(10);
 
     return (
         <div className="flex flex-col items-center justify-center py-20 px-4 bg-[#f4f9f1]">

@@ -17,15 +17,15 @@ export default async function OverviewPage() {
     return (
         <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto p-4 md:p-8">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-                <h1 className="text-2xl font-bold tracking-tight">Dashboard Overview</h1>
+                <h1 className="text-2xl font-bold tracking-tight text-green-900">Dashboard Overview</h1>
                 <p className="text-gray-500 font-medium">Welcome to Barangay 9A Admin Panel</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 {/* Announcements Card */}
-                <div className="flex items-center gap-6 p-6 rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow">
-                    <div className="flex items-center justify-center w-20 h-20 rounded-2xl bg-green-50 text-pink-600">
-                        <Megaphone className="w-10 h-10" fill="currentColor" strokeWidth={1} />
+                <div className="flex items-center gap-6 p-6 rounded-xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow">
+                    <div className="flex items-center justify-center w-16 h-16 rounded-lg bg-green-100/50 text-pink-600">
+                        <Megaphone className="w-8 h-8" fill="currentColor" strokeWidth={0} />
                     </div>
                     <div className="flex flex-col">
                         <span className="text-3xl font-bold text-green-900">{announcementCount || 0}</span>
@@ -34,9 +34,9 @@ export default async function OverviewPage() {
                 </div>
 
                 {/* Educational Resources Card */}
-                <div className="flex items-center gap-6 p-6 rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow">
-                    <div className="flex items-center justify-center w-20 h-20 rounded-2xl bg-green-50 text-blue-500">
-                        <BookOpen className="w-10 h-10" fill="currentColor" strokeWidth={1} />
+                <div className="flex items-center gap-6 p-6 rounded-xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow">
+                    <div className="flex items-center justify-center w-16 h-16 rounded-lg bg-green-100/50 text-blue-500">
+                        <BookOpen className="w-8 h-8" fill="currentColor" strokeWidth={0} />
                     </div>
                     <div className="flex flex-col">
                         <span className="text-3xl font-bold text-green-900">{resourceCount || 0}</span>
@@ -45,14 +45,25 @@ export default async function OverviewPage() {
                 </div>
 
                 {/* Today's Date Card */}
-                <div className="flex items-center gap-6 p-6 rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow">
-                    <div className="flex items-center justify-center w-20 h-20 rounded-2xl bg-green-50 text-blue-400">
-                        <Calendar className="w-10 h-10" fill="currentColor" strokeWidth={1} />
+                <div className="flex items-center gap-6 p-6 rounded-xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow">
+                    <div className="flex items-center justify-center w-16 h-16 rounded-lg bg-green-100/50 text-blue-400">
+                        <Calendar className="w-8 h-8" fill="currentColor" strokeWidth={0} />
                     </div>
                     <div className="flex flex-col">
                         <span className="text-2xl font-bold text-green-900">{todayDate}</span>
                         <span className="text-gray-500 text-sm font-medium mt-1">Today&apos;s Date</span>
                     </div>
+                </div>
+            </div>
+
+            <div className="flex flex-col gap-4">
+                <h2 className="text-xl font-bold text-green-900">Recent Announcements</h2>
+                <div className="bg-white rounded-xl border border-gray-100 p-12 flex items-center justify-center shadow-sm">
+                    {announcementCount === 0 || announcementCount === null ? (
+                        <p className="text-gray-400 italic">No announcements yet. Create your first announcement!</p>
+                    ) : (
+                        <p className="text-gray-500">Recent announcements will appear here.</p>
+                    )}
                 </div>
             </div>
         </div>
